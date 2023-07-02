@@ -28,6 +28,22 @@ pipeline {
                 }
             }
         }
+        stage('Manual Approval') {
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'manual-approval',
+                        message: 'Lanjutkan ke tahap Deploy?',
+                        parameters: [
+                            choice(choices: ['Proceed', 'Abort'], description: 'Pilihan', name: 'decision')
+                        ]
+                    )
+                    if (userInput.decision == 'Abort') {
+                        error('Pipeline dihentikan berdasarkan permintaan pengguna')
+                    }
+                }
+            }
+        }
         stage('Deliver') { 
             agent any
             environment { 
