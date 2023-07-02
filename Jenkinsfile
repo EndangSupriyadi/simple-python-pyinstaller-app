@@ -28,7 +28,12 @@
         }
         stage('Manual Approval') {
             steps {
-                input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed', submitter: 'user'
+                input message: 'Lanjutkan ke tahap Deploy?', parameters: [
+                    [$class: 'ChoiceParameter', 
+                    choices: 'Proceed\nAbort', 
+                    description: 'Pilih apakah melanjutkan eksekusi pipeline ke tahap Deploy atau menghentikannya.', 
+                    name: 'APPROVAL']
+                ]
             }
         }
         stage('Deliver') { 
