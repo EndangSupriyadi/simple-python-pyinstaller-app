@@ -1,5 +1,5 @@
- node {
-    
+ pipeline {
+    agent none
         stage('Build') {
             agent {
                 docker {
@@ -27,12 +27,21 @@
             }
         }
         stage('Manual Approval') {
-        steps {
-            timeout(time: 1, unit: 'DAYS') {
-                input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed', submitter: 'user'
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'manual-approval',
+                        message: 'Lanjutkan ke tahap Deploy?',
+                        parameters: [
+                            choice(choices: ['Proceed', 'Abort'], description: 'Pilihan', name: 'decision')
+                        ]
+                    )
+                    if (userInput.decision == 'Abort') {
+                        error('Pipeline dihentikan berdasarkan permintaan pengguna')
+                    }
+                }
             }
         }
-    }
         stage('Deliver') { 
             agent any
             environment { 
