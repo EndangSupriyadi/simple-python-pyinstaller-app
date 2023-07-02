@@ -31,15 +31,19 @@ pipeline {
         stage('Manual Approval') {
             steps {
                 script {
-                    def userInput = input(
-                        id: 'manual-approval',
+                    def approval = input(
+                        id: 'approval',
                         message: 'Lanjutkan ke tahap Deploy?',
                         parameters: [
-                            choice(choices: ['Proceed', 'Abort'], description: 'Pilihan', name: 'decision')
+                            [$class: 'ChoiceParameterDefinition', 
+                             choices: 'Proceed\nAbort', 
+                             description: 'Pilih tindakan', 
+                             name: 'decision']
                         ]
                     )
-                    if (userInput.decision == 'Abort') {
-                        error('Pipeline dihentikan berdasarkan permintaan pengguna')
+
+                    if (approval == 'Abort') {
+                        error('Pipeline dihentikan berdasarkan pilihan pengguna.')
                     }
                 }
             }
