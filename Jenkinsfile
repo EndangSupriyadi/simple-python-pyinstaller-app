@@ -1,7 +1,5 @@
- pipeline {
-    agent none
-    stages {
-        
+ node {
+    
         stage('Build') {
             agent {
                 docker {
@@ -28,6 +26,11 @@
                 }
             }
         }
+        stage('Manual Approval') {
+            steps {
+                input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed', submitter: 'user'
+            }
+        }
         stage('Deliver') { 
             agent any
             environment { 
@@ -47,5 +50,5 @@
                 }
             }
         }
-    }
+    
 }
