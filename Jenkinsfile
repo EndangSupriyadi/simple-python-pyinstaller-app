@@ -67,5 +67,22 @@ pipeline {
                 }
             }
         }
+        stage('Pause for 1 Minute') {
+            steps {
+                // Menggunakan langkah sleep untuk menjeda eksekusi selama 1 menit
+                sleep time: 1, unit: 'MINUTES'
+                // Atau menggunakan langkah timeout dari plugin Build Timeout
+                timeout(time: 1, unit: 'MINUTES') {
+                    // Tidak perlu melakukan apa-apa di sini, cukup menunggu waktu timeout berakhir
+                }
+            }
+        }
+        stage('End Application') {
+            steps {
+                // Langkah untuk mengakhiri aplikasi secara otomatis setelah 1 menit
+                // Contoh: stop server atau layanan yang menjalankan aplikasi
+                // sh 'npm stop' atau perintah lainnya sesuai dengan kebutuhan Anda
+            }
+        }
     }
 }
