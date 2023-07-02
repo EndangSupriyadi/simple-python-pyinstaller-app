@@ -1,5 +1,12 @@
+
 pipeline {
-        agent none
+    agent none
+    stages {
+        checkout([$class: 'GitSCM',
+          branches: [[name: '*/master']],
+          userRemoteConfigs: [[url: 'https://github.com/EndangSupriyadi/simple-python-pyinstaller-app.git']],
+          extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'jenkins']]])
+
         stage('Build') {
             agent {
                 docker {
@@ -26,22 +33,6 @@ pipeline {
                 }
             }
         }
-        stage('Manual Approval') {
-            steps {
-                script {
-                    def userInput = input(
-                        id: 'manual-approval',
-                        message: 'Lanjutkan ke tahap Deploy?',
-                        parameters: [
-                            choice(choices: ['Proceed', 'Abort'], description: 'Pilihan', name: 'decision')
-                        ]
-                    )
-                    if (userInput.decision == 'Abort') {
-                        error('Pipeline dihentikan berdasarkan permintaan pengguna')
-                    }
-                }
-            }
-        }
         stage('Deliver') { 
             agent any
             environment { 
@@ -61,5 +52,5 @@ pipeline {
                 }
             }
         }
- 
+    }
 }
