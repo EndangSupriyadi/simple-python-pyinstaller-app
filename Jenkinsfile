@@ -1,12 +1,7 @@
 
 pipeline {
     agent none
-    stages {
-        checkout([$class: 'GitSCM',
-          branches: [[name: '*/master']],
-          userRemoteConfigs: [[url: 'https://github.com/EndangSupriyadi/simple-python-pyinstaller-app.git']],
-          extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'jenkins']]])
-
+    
         stage('Build') {
             agent {
                 docker {
