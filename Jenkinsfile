@@ -26,17 +26,13 @@
                 }
             }
         }
-        stage('Approval') {
-            steps {
-                script {
-                    // Menampilkan pesan persetujuan
-                    echo "Apakah Anda menyetujui untuk melanjutkan ke tahap Deploy?"
-
-                    // Menyimpan hasil persetujuan
-                    env.APPROVAL = input(message: 'Persetujuan', ok: 'Lanjutkan', submitterParameter: 'APPROVAL')
-                }
+        stage('Manual Approval') {
+        steps {
+            timeout(time: 1, unit: 'DAYS') {
+                input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed', submitter: 'user'
             }
         }
+    }
         stage('Deliver') { 
             agent any
             environment { 
