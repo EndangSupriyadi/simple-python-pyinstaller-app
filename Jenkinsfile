@@ -1,5 +1,5 @@
- pipeline {
-    agent none
+pipeline {
+        agent none
         stage('Build') {
             agent {
                 docker {
@@ -61,5 +61,5 @@
                 }
             }
         }
-    
+ 
 }
