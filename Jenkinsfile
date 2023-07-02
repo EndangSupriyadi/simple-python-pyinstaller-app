@@ -26,14 +26,15 @@
                 }
             }
         }
-        stage('Manual Approval') {
+        stage('Approval') {
             steps {
-                input message: 'Lanjutkan ke tahap Deploy?', parameters: [
-                    [$class: 'ChoiceParameter', 
-                    choices: 'Proceed\nAbort', 
-                    description: 'Pilih apakah melanjutkan eksekusi pipeline ke tahap Deploy atau menghentikannya.', 
-                    name: 'APPROVAL']
-                ]
+                script {
+                    // Menampilkan pesan persetujuan
+                    echo "Apakah Anda menyetujui untuk melanjutkan ke tahap Deploy?"
+
+                    // Menyimpan hasil persetujuan
+                    env.APPROVAL = input(message: 'Persetujuan', ok: 'Lanjutkan', submitterParameter: 'APPROVAL')
+                }
             }
         }
         stage('Deliver') { 
